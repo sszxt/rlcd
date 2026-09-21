@@ -1,0 +1,9 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter": "outputs/lora_adapter_e3",
+  "n": 500,
+  "parse_failure_rate": 0.0,
+  "accuracy": 0.526,
+  "brier_score": 0.3235206,
+  "ece": 0.31850000000000006
+}

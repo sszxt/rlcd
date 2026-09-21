@@ -41,24 +41,33 @@ Model: `Qwen/Qwen2.5-1.5B-Instruct`. Data: MMLU (`cais/mmlu`, `all` config),
 3000 questions for preference generation, 500 held out for eval, disjoint,
 fixed seed.
 
-## Result (first run: 1237 preference pairs, 1 epoch)
+## Result (1237 preference pairs, same held-out 500 questions throughout)
 
 | | accuracy | Brier score | ECE |
 |---|---|---|---|
 | baseline | 0.496 | 0.487 | 0.490 |
-| after RLCD/DPO | 0.518 | 0.409 | **0.423** |
+| after RLCD/DPO, 1 epoch | 0.518 | 0.409 | 0.423 |
+| after RLCD/DPO, 3 epochs | 0.526 | 0.324 | **0.319** |
 
 ![baseline reliability diagram](outputs/baseline_reliability.png)
-![post-training reliability diagram](outputs/posttrain_reliability.png)
+![1-epoch reliability diagram](outputs/posttrain_reliability.png)
+![3-epoch reliability diagram](outputs/posttrain_e3_reliability.png)
 
-ECE dropped ~14% and Brier score ~16% after a single epoch on a modest,
-label-free preference set, with accuracy holding steady (even ticking up
-slightly). **The model is still meaningfully overconfident** — it still
-answers "90-100% confident" on the large majority of questions, and within
-that top confidence bin its real accuracy is only ~58% post-training (up
-from ~52%). So this is a real, measured step in the right direction, not a
-solved calibration problem — more preference data, more epochs, or a larger
-LoRA rank would likely push it further; that's the natural next experiment.
+More epochs on the same small, label-free preference set kept improving
+calibration with no sign of collapse: ECE dropped a further ~25% (0.423 ->
+0.319) going from 1 to 3 epochs, Brier score similarly, and accuracy held
+steady/ticked up. This isn't the model just learning to state one fixed
+"safe" confidence — the 3-epoch reliability diagram shows it now uses a
+distinct low-confidence cluster (20-40%, ~66/500 answers) that is itself
+reasonably well calibrated (~24% empirical accuracy against a 20-40% stated
+range), on top of a much better-calibrated top bin (90-100% confidence is
+now ~67% accurate, up from ~52% baseline). **It's still overconfident in
+the 70-90% band** (only ~28-33% actual accuracy there) and still far from
+perfectly calibrated overall — a genuine, still-improving result rather
+than a solved problem. Training loss and DPO reward accuracy on the
+training pairs also kept improving through all 3 epochs (loss 0.65 -> 0.53
+avg, reward accuracy ~60-68% -> ~75-85%), so more epochs, more preference
+data, or a larger LoRA rank are all plausible next steps to push further.
 
 ## Running it
 

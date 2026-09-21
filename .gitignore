@@ -4,8 +4,10 @@ __pycache__/
 outputs/*
 !outputs/baseline_reliability.png
 !outputs/posttrain_reliability.png
+!outputs/posttrain_e3_reliability.png
 !outputs/baseline_summary.json
 !outputs/posttrain_summary.json
+!outputs/posttrain_e3_summary.json
 .env
 *.egg-info/
 .uv-cache/
