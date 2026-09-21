@@ -32,8 +32,8 @@ def main():
     parser.add_argument("--out-dir", default=str(OUTPUTS_DIR / "lora_adapter"))
     parser.add_argument("--epochs", type=float, default=1.0)
     parser.add_argument("--lr", type=float, default=5e-5)
-    parser.add_argument("--batch-size", type=int, default=4)
-    parser.add_argument("--grad-accum", type=int, default=4)
+    parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument("--grad-accum", type=int, default=16)
     parser.add_argument("--beta", type=float, default=0.1, help="DPO beta")
     args = parser.parse_args()
 
@@ -58,11 +58,11 @@ def main():
         gradient_accumulation_steps=args.grad_accum,
         beta=args.beta,
         bf16=True,
+        gradient_checkpointing=True,
         logging_steps=10,
         save_strategy="epoch",
         report_to=[],
-        max_length=768,
-        max_prompt_length=512,
+        max_length=512,
     )
 
     trainer = DPOTrainer(

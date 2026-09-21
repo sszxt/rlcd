@@ -36,12 +36,15 @@ NEGATIVE_STEERING_PROMPT = (
 )
 
 ANSWER_FORMAT_INSTRUCTIONS = (
-    "Respond in exactly this format and nothing else:\n"
-    "Answer: <A, B, C, or D>\n"
-    "Confidence: <0-100>"
+    "Respond with exactly two lines and nothing else. On the first line "
+    "write the word 'Answer:' followed by only the single letter of the "
+    "option you are choosing -- it must be one specific letter, not a list "
+    "of the options. On the second line write the word 'Confidence:' "
+    "followed by only your confidence as a whole number from 0 to 100."
 )
 
-_ANSWER_RE = re.compile(r"answer\s*:\s*\(?([A-D])\)?", re.IGNORECASE)
+# Negative lookahead rejects a listed-options echo like "Answer: A, B, C, or D".
+_ANSWER_RE = re.compile(r"answer\s*:\s*\(?([A-D])\)?(?!\s*,\s*[A-D])", re.IGNORECASE)
 _CONF_RE = re.compile(r"confidence\s*:\s*(\d{1,3})", re.IGNORECASE)
 
 

@@ -1,0 +1,9 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter": null,
+  "n": 500,
+  "parse_failure_rate": 0.0,
+  "accuracy": 0.496,
+  "brier_score": 0.4866436,
+  "ece": 0.48992000000000013
+}
